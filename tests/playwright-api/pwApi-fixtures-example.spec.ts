@@ -4,22 +4,22 @@ test.describe('PW-API-PLUGIN PLAYWRIGHT API Tests for https://jsonplaceholder.ty
 
     const baseUrl = 'https://jsonplaceholder.typicode.com';
 
-    test('Verify pwApi GET, HEAD, POST, PUT, PATCH, DELETE in single test', async ({ request, startPage }) => {
+    test('Verify pwApi GET, HEAD, POST, PUT, PATCH, DELETE in single test', async ({ postsApi, startPage }) => {
 
         // ✔️ Example of get
-        const responseGet = await pwApi.get({ request, startPage }, `${baseUrl}/posts/1`)
+        const responseGet = await pwApi.get({ postsApi, startPage }, `${baseUrl}/posts/1`)
         expect(responseGet.status()).toBe(200)
         const responseBodyGet = await responseGet.json()
         expect(responseBodyGet).toHaveProperty('id', 1)
 
 
         // ✔️ Example of head
-        const responseHead = await pwApi.head({ request, startPage }, `${baseUrl}/posts/1`)
+        const responseHead = await pwApi.head({ postsApi, startPage }, `${baseUrl}/posts/1`)
         expect(responseHead.status()).toBe(200)
 
 
         // ✔️ Example of post (with request body and request headers)
-        const responsePost = await pwApi.post({ request, startPage }, `${baseUrl}/posts`,
+        const responsePost = await pwApi.post({ postsApi, startPage }, `${baseUrl}/posts`,
             {
                 data: {
                     title: 'foo',
@@ -37,7 +37,7 @@ test.describe('PW-API-PLUGIN PLAYWRIGHT API Tests for https://jsonplaceholder.ty
 
 
         // ✔️ Example of put (with request: body, headers, params, timeout, maxRetries)
-        const responsePut = await pwApi.put({ request, startPage }, 'https://jsonplaceholder.typicode.com/posts/1',
+        const responsePut = await pwApi.put({ postsApi, startPage }, 'https://jsonplaceholder.typicode.com/posts/1',
             {
                 data: {
                     id: 1,
@@ -59,7 +59,7 @@ test.describe('PW-API-PLUGIN PLAYWRIGHT API Tests for https://jsonplaceholder.ty
 
 
         // ✔️ Example of patch (with request body and request headers)
-        const responsePatch = await pwApi.patch({ request, startPage }, 'https://jsonplaceholder.typicode.com/posts/1',
+        const responsePatch = await pwApi.patch({ postsApi, startPage }, 'https://jsonplaceholder.typicode.com/posts/1',
             {
                 data: {
                     title: 'hello',
@@ -73,16 +73,16 @@ test.describe('PW-API-PLUGIN PLAYWRIGHT API Tests for https://jsonplaceholder.ty
 
 
         // ✔️ Example for delete
-        const responseDelete = await pwApi.delete({ request, startPage }, 'https://jsonplaceholder.typicode.com/posts/1');
+        const responseDelete = await pwApi.delete({ postsApi, startPage }, 'https://jsonplaceholder.typicode.com/posts/1');
         expect(responseDelete.ok()).toBeTruthy()
 
     })
 
 
-    test('Verify pwApi FETCH (using default GET)', async ({ request, startPage }) => {
+    test('Verify pwApi FETCH (using default GET)', async ({ postsApi, startPage }) => {
 
         // ✔️ Example fetch (default GET)
-        const responseFetch = await pwApi.fetch({ request, startPage }, `${baseUrl}/posts`);
+        const responseFetch = await pwApi.fetch({ postsApi, startPage }, `${baseUrl}/posts`);
         expect(responseFetch.status()).toBe(200)
         const responseBodyFetch = await responseFetch.json()
         expect(responseBodyFetch.length).toBeGreaterThan(4)
@@ -90,10 +90,10 @@ test.describe('PW-API-PLUGIN PLAYWRIGHT API Tests for https://jsonplaceholder.ty
     })
 
 
-    test('Verify pwApi for Failing GET Method (404)', async ({ request, startPage }) => {
+    test('Verify pwApi for Failing GET Method (404)', async ({ postsApi, startPage }) => {
 
         // ❌ Example for get with wrong URL
-        const responseFetch = await pwApi.get({ request, startPage }, `${baseUrl}/this-is-a-non-sense-endpoint`)
+        const responseFetch = await pwApi.get({ postsApi, startPage }, `${baseUrl}/this-is-a-non-sense-endpoint`)
         expect(responseFetch.status()).toBe(404)
 
     })
